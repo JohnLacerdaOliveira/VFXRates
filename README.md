@@ -169,7 +169,7 @@ The core configuration is stored in appsettings.json with placeholder values tha
 
 **Environment-Specific Modes:**
 
-- Development (Transient Database & Swagger UI): The app will drop and re-create the database on every run and provides a Swagger UI for API testing.
+- *Development* (Transient Database & Swagger UI): The app will drop and re-create the database on every run and provides a Swagger UI for API testing.
 - Development (Persistent Database & Headless Mode): The app maintains a persistent database without the Swagger UI for scenarios where a headless configuration is desired.
 - Docker (Production-like Mode): The application runs with configurations similar to production, including external container dependencies.
 

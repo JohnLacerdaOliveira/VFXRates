@@ -165,20 +165,27 @@ Use your IDE’s test explorer or run the tests using the following command:
 ## Environment & Configuration
 
 **App Settings:**
-The application configuration is stored in appsettings.json with placeholder values.
-Sensitive data (e.g., connection strings, API keys) should be overridden using environment variables or user secrets thru a .env file added to the project's root folder.
+The core configuration is stored in appsettings.json with placeholder values that can be overridden using environment variables or user secrets via a .env file located at the project's root. This setup supports multiple environments, allowing you to tailor settings based on where the application is running.
 
-**Logging:**
-Logging is configured via the built-in logging provider (console) and additional configuration can be found in appsettings.json.
+**Environment-Specific Modes:**
 
-**HTTPS Configuration:**
-The application binds to URLs defined by the ASPNETCORE_URLS environment variable.
-In production, ensure that you provide a valid certificate if using HTTPS.
+- Development (Transient Database & Swagger UI): The app will drop and re-create the database on every run and provides a Swagger UI for API testing.
+- Development (Persistent Database & Headless Mode): The app maintains a persistent database without the Swagger UI for scenarios where a headless configuration is desired.
+- Docker (Production-like Mode): The application runs with configurations similar to production, including external container dependencies.
 
 **Container Requirements:**
 When running the application, launching from Visual Studio, ensure that the SQL Server and RabbitMQ containers are running, as these services are essential for data persistence and messaging functionality.
 
 `docker-compose up selserver rabbitmq`
+  
+**Logging:**
+Currently, the application is configured to log to the console using the built-in logging provider. In future versions, you could integrate more advanced logging mechanisms such as logging to files, a centralized logging system (e.g., ELK Stack, Azure Application Insights, or Seq), or even both, to facilitate improved monitoring and diagnostics in production environments.
+
+**HTTPS Configuration:**
+The application binds to URLs defined by the ASPNETCORE_URLS environment variable.
+In production, ensure that you provide a valid certificate if using HTTPS.
+
+
 
 ## Design Considerations 
 

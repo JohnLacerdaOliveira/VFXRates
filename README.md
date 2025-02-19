@@ -54,7 +54,7 @@
 
 - **Infrastructure Layer:**  
   Contains repository implementations (e.g., [`FxRateRepository`](src/VFXRates.Infrastructure/Repositories/FxRateRepository.cs)) and the EF Core [`DbContext`](src/VFXRates.Infrastructure/Data/DbContext/FxRatesDbContext.cs).  
-  This layer also contains integration with external services (e.g., the [`AlphaVantageApiClient`](src/VFXRates.Application/Services/AlphaVantageApiClient.cs)) and message publishing thru (e.g., [` RabbitMqPublisher`](src/VFXRates.Infrastructure/Messaging/RabbitMqPublisher.cs)).
+  This layer also contains integration with external services (e.g., the [`AlphaVantageApiClient`](src/VFXRates.Application/Services/AlphaVantageApiClient.cs)) and message publishing thru (e.g., [`RabbitMqPublisher`](src/VFXRates.Infrastructure/Messaging/RabbitMqPublisher.cs)).
 
 - **Configuration & Startup:**  
   Startup configuration has been organized into [`extension methods`](src/VFXRates.API/Extensions/) to promote separation of concerns. Logging is configured to output to the console and key startup events are logged.
@@ -80,7 +80,7 @@
 2. **Configure User Secrets**
 If you wish to override any settings (e.g., connection strings, API keys), use User Secrets or set environment variables in your IDE’s launch settings.
 
-3. **Set Up the Database:**
+3. **Set Up the Database & RabbitMQ server:**
 
 Make sure to start the sqlserver and rabbitMQ containers running the following command in the project's root directory:
 

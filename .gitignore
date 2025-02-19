@@ -38,7 +38,6 @@ docker-compose.*.yml
 Thumbs.db
 
 # Secret config files
-appsettings.Development.json
 appsettings.*.local.json
 .env
 

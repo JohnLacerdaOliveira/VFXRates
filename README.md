@@ -145,17 +145,16 @@ The application publishes an event to RabbitMQ when a new FX rate is created. Yo
 
 ## Testing
 
-[**Unit Tests:**](tests/VFXRates.Application.UnitTests/FxRateServiceTests.cs)
-Located under the tests/VFXRates.Application.UnitTests folder.
-Use your IDE’s test explorer or run the tests using the following command:
+**Unit Tests:**
+The project includes comprehensive [`Unit Tests`](tests/VFXRates.Application.UnitTests/FxRateServiceTests.cs) that cover core business logic and repository interactions, ensuring the correctness of functionality and enabling early detection of bugs. These tests can be executed with the following command:
 
 `dotnet test tests/VFXRates.Application.UnitTests`
 
 <img src="https://github.com/user-attachments/assets/4e8ebd39-b8fc-4280-968b-fd4ea55c70ba" alt="Description" style="width:60%;" />
 
 
-[**Integration Tests:**](tests/VFXRates.API.IntegrationTests/FxRatesIntegrationTests.cs)
-These tests use an in-memory database or Docker containers to test the full behavior of the API.
+**Integration Tests:**
+The project includes [`Integration Tests`](tests/VFXRates.API.IntegrationTests/FxRatesIntegrationTests.cs) that validate the complete end-to-end functionality of the application by simulating real-world scenarios with external dependencies. These tests ensure that the various layers of the application (API, Application, Domain, Infrastructure) work together as expected and help catch issues that might not surface in unit testing. They can be executed with the following command:
 
 Use your IDE’s test explorer or run the tests using the following command:
 `dotnet test tests/VFXRates.API.IntegrationTests`

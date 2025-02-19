@@ -44,10 +44,10 @@
 ## Architecture & Design
 
 - **API Layer:**  
-  Contains the controllers that expose REST endpoints.
+  Contains the controllers [`controllers`](src/VFXRates.API/Controllers/FxRatesController.cs) that expose REST endpoints.
 
 - **Application Layer:**  
-  Contains business logic in services (e.g., [`FxRateService`](src/VFXRates.Application/Services/FxRatesService.cs)) and Data Transfer Objects (DTOs) for communication between layers.
+  Contains business logic in services (e.g., [`FxRateService`](src/VFXRates.Application/Services/FxRatesService.cs)) and [`Transfer Objects (DTOs)`](src/VFXRates.Application/DTOs/) for communication between layers.
 
 - **Domain Layer:**  
   Contains core domain entities such as the [`FxRate`](src/VFXRates.Domain/Entities/FxRate.cs) entity.

@@ -53,7 +53,7 @@
   Contains core domain entities such as the [`FxRate`](src/VFXRates.Domain/Entities/FxRate.cs) entity.
 
 - **Infrastructure Layer:**  
-  Contains repository implementations (e.g., [`FxRateRepository`](src/VFXRates.Infrastructure/Repositories/FxRateRepository.cs)) and the EF Core [`DbContext`](src/VFXRates.Infrastructure/DbContext/FxRatesDbContext.cs).  
+  Contains repository implementations (e.g., [`FxRateRepository`](src/VFXRates.Infrastructure/Repositories/FxRateRepository.cs)) and the EF Core [`DbContext`](src/VFXRates.Infrastructure/Data/DbContext/FxRatesDbContext.cs).  
   This layer also contains integration with external services (e.g., the [`AlphaVantageApiClient`](src/VFXRates.Application/Services/AlphaVantageApiClient.cs)) and message publishing thru (e.g., [` RabbitMqPublisher`](src/VFXRates.Infrastructure/Messaging/RabbitMqPublisher.cs)).
 
 - **Configuration & Startup:**  

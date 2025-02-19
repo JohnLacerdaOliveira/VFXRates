@@ -77,13 +77,14 @@
    git clone https://github.com/yourusername/VFXRates.git
    cd VFXRates
  
-2. **Configure User Secrets / Environment Variables:**
+2. **Configure User Secrets**
 If you wish to override any settings (e.g., connection strings, API keys), use User Secrets or set environment variables in your IDE’s launch settings.
 
 3. **Set Up the Database:**
 
-Make sure to start the sqlserver and rabbitMQ containers
+Make sure to start the sqlserver and rabbitMQ containers running the following command in the project's root directory:
 
+`docker-compose up sqlserver rabbitmq`
 
 The application automatically runs EF Core migrations on startup.
 In development, the database will be deleted and re-created on each run.
@@ -118,9 +119,11 @@ API_KEY=EPSZTUZ68K5RRBAD
  `bash 
 docker-compose up --build`
 
-This command builds the API image and starts two containers:
-sqlserver: Running SQL Server 2019.
-vfxrates-api: The API application.
+This command builds the API image and starts 3 containers:
+
+- **vfxrates-api**: The API application.
+- **sqlserver**: Running SQL Server 2019.
+- **rabbitmq**: Running the RabbitMQ messaging service (management UI available on http://localhost:15672/).
 
 4. **Accessing the API:**
 
@@ -169,9 +172,9 @@ The core configuration is stored in appsettings.json with placeholder values tha
 
 **Environment-Specific Modes:**
 
-- *Development* (Transient Database & Swagger UI): The app will drop and re-create the database on every run and provides a Swagger UI for API testing.
-- Development (Persistent Database & Headless Mode): The app maintains a persistent database without the Swagger UI for scenarios where a headless configuration is desired.
-- Docker (Production-like Mode): The application runs with configurations similar to production, including external container dependencies.
+- ***Development*** (Transient Database & Swagger UI): The app will drop and re-create the database on every run and provides a Swagger UI for API testing.
+- ***Production*** (Persistent Database & Headless Mode): The app maintains a persistent database without the Swagger UI for scenarios where a headless configuration is desired.
+- ***Docker*** (Production-like Mode): The application runs with configurations similar to production, including external container dependencies.
 
 **Container Requirements:**
 When running the application, launching from Visual Studio, ensure that the SQL Server and RabbitMQ containers are running, as these services are essential for data persistence and messaging functionality.

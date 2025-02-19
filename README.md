@@ -47,7 +47,7 @@
   Contains the controllers that expose REST endpoints.
 
 - **Application Layer:**  
-  Contains business logic in services (e.g., [`FxRateService`](src/VFXRates.Application/Services/FxRateService.cs)) and Data Transfer Objects (DTOs) for communication between layers.
+  Contains business logic in services (e.g., [`FxRateService`](src/VFXRates.Application/Services/FxRatesService.cs)) and Data Transfer Objects (DTOs) for communication between layers.
 
 - **Domain Layer:**  
   Contains core domain entities such as the [`FxRate`](src/VFXRates.Domain/Entities/FxRate.cs) entity.
@@ -145,7 +145,7 @@ The application publishes an event to RabbitMQ when a new FX rate is created. Yo
 
 ## Testing
 
-**Unit Tests:**
+[**Unit Tests:**](tests/VFXRates.Application.UnitTests/FxRateServiceTests.cs)
 Located under the tests/VFXRates.Application.UnitTests folder.
 Use your IDE’s test explorer or run the tests using the following command:
 
@@ -154,15 +154,13 @@ Use your IDE’s test explorer or run the tests using the following command:
 <img src="https://github.com/user-attachments/assets/4e8ebd39-b8fc-4280-968b-fd4ea55c70ba" alt="Description" style="width:60%;" />
 
 
-**Integration Tests:**
-Located under the tests/VFXRates.API.IntegrationTests folder.
+[**Integration Tests:**](tests/VFXRates.API.IntegrationTests/FxRatesIntegrationTests.cs)
 These tests use an in-memory database or Docker containers to test the full behavior of the API.
 
 Use your IDE’s test explorer or run the tests using the following command:
 `dotnet test tests/VFXRates.API.IntegrationTests`
 
 <img src="https://github.com/user-attachments/assets/21c1dde9-c9c5-45a0-a701-ffc5c53494dd" alt="Description" style="width:60%;" />
-
 
 
 ## Environment & Configuration

@@ -1,0 +1,68 @@
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "${SA_PASSWORD}"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - vfxrates-network
+    restart: unless-stopped
+    #healthcheck:
+      #disable: true
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'healthy'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitMQ
+    environment:
+       RABBITMQ_DEFAULT_USER: "${RABBITMQ_USER}"
+       RABBITMQ_DEFAULT_PASS: "${RABBITMQ_PASS}"
+    ports:
+       - "5672:5672"  
+       - "15672:15672"
+    networks:
+       - vfxrates-network
+    restart: unless-stopped
+
+
+  vfxrates-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env 
+    container_name: VFXRratesAPI
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+      ConnectionStrings__FxRatesDockerDb: "${SQLSERVER_CONNECTIONSTRING}"
+      AlphaVantage__ApiKey: "${API_KEY}"
+      ASPNETCORE_URLS: "http://+:80;https://+:443"
+    ports:
+     - "80:80"
+     - "443:443"
+    networks:
+      - vfxrates-network
+    restart: unless-stopped
+
+
+networks:
+  vfxrates-network:
+    driver: bridge
+
+
+volumes:
+  sqlserver-data:

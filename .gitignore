@@ -1,0 +1,63 @@
+# Ignore Visual Studio files
+.vs/
+*.user
+*.suo
+*.userprefs
+
+# Ignore build outputs
+bin/
+obj/
+*.log
+
+# If you have a publish folder
+publish/
+wwwroot/
+
+# Rider / JetBrains IDEs
+.idea/
+*.idea/
+
+# Resharper
+*.DotSettings.user
+
+# Ignore any coverage output
+coverage/
+TestResult.xml
+TestResults/
+
+# Ignore docker-related ephemeral data
+docker-compose.override.yml
+docker-compose.*.yml
+**/Dockerfile*
+!Dockerfile            
+*.container.log
+*.container.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Secret config files
+appsettings.*.local.json
+.env
+
+# If you use local certificate stores
+*.pfx
+*.p12
+
+# Optional: If you store user secrets for EF migrations or other secrets
+**/secrets.json
+
+#  Visual Studio Code files
+.vscode/
+.history/
+
+# Node modules (if you happen to have a frontend in the same repo)
+node_modules/
+
+# If you have a global tools manifest
+.dotnet-tools.json
+
+#Personal
+InterviewQuestions.txt
+Notes.txt

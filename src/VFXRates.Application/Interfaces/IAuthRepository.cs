@@ -1,0 +1,9 @@
+﻿using VFXRates.Domain.Entities;
+
+namespace VFXRates.Application.Interfaces;
+
+public interface IAuthRepository
+{
+    Task<User?> GetUserByUsernameAsync(string username);
+    Task AddUserAsync(User user);
+}

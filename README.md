@@ -235,7 +235,9 @@ The core configuration is stored in appsettings.json with placeholder values tha
 **Container Requirements:**  
 When running the application, launching from Visual Studio, ensure that the SQL Server and RabbitMQ containers are running, as these services are essential for data persistence and messaging functionality.
 
-`docker-compose up selserver rabbitmq`
+```cmd 
+docker-compose up selserver rabbitmq
+```  
   
 **Logging:**  
 Currently, the application is configured to log to the console using the built-in logging provider and also logs to a database table application specific logs only. In future versions, you could integrate more advanced logging mechanisms such as logging to files, a centralized logging system (e.g., ELK Stack, Azure Application Insights, or Seq), or even both, to facilitate improved monitoring and diagnostics in production environments.

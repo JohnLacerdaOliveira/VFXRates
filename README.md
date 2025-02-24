@@ -137,7 +137,7 @@ In Production, the database is persistent in between runs.
 5. **Run the Application:**
 Press F5 or use Visual Studio’s run command:
 
-Run in Development for swagger support and utilize the application thru the provided UI at [https://localhost:5208](https://localhost:7291/swagger/index.html)
+Run in Development for swagger support and utilize the application thru the provided UI at [https://localhost:7291](https://localhost:7291/swagger/index.html)
 In Production the application launches in headless mode with no swagger support.
 
 6. **Testing Endpoints:**
@@ -192,7 +192,7 @@ In addition to the core functionality, this application demonstrates a simple in
 
  
 **How to Test the Message Broker**    
-Once the RabbitMQ container is running, open your browser and navigate to [[https://localhost:5208](http://localhost:15672)]. 
+Once the RabbitMQ container is running, open your browser and navigate to [[https://localhost:15672](http://localhost:15672)]. 
 The login credentials will be the ones set int the .Env file
 
 **Testing Event Publishing**    

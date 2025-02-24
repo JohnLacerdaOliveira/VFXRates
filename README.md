@@ -1,6 +1,10 @@
 # VFXRates
 
-**VFXRates** is an ASP.NET Core Web API that manages foreign exchange rates. It supports full CRUD operations on currency pairs (with separate bid and ask prices) and can fetch fresh FX rates from Alpha Vantage when a requested currency pair does not exist in the local database. An optional message queue (RabbitMQ) publishes events whenever a new rate is added.
+**VFXRates** is an ASP.NET Core Web API that manages foreign exchange rates. It supports full CRUD operations on currency pairs, maintaining separate bid and ask prices. When a requested currency pair does not exist in the local database, the application fetches fresh FX rates from Alpha Vantage and stores them for future use.  
+
+The application is designed with 100% integration test coverage, ensuring system reliability and correctness. It uses JWT authentication to secure API access and logs application events directly to the database for better monitoring and debugging. With support for multiple environments, including Development, IntegrationTest, and Production, it allows seamless configuration adjustments.  
+
+For deployment, VFXRates provides Docker configuration, simplifying the process of running the application in a production environment. Additionally, it offers optional RabbitMQ integration, enabling event-based messaging whenever a new FX rate is added. The project follows modern best practices in scalable and maintainable ASP.NET Core development.  
 
 <img src="https://github.com/user-attachments/assets/16a39eb0-fe6e-4750-a417-24b28554b94f" alt="Description" style="width:100%" style="display: block; margin: 0 auto;" />
 

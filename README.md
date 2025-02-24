@@ -143,7 +143,7 @@ In Production the application launches in headless mode with no swagger support.
 6. **Testing Endpoints:**
 When ran in Develpment mode the application can be used thru Swagger's UI that lauches at startup
 
-A complete [`Postman collection`](src/VFXRates/tests/TestUtilities/PostmanTests/) of requests is also provided with the project, just import into Postman and use.
+A complete [`Postman collection`](tests/VFXRates.TestUtilities/PostmanTests/VFXRates.postman_collection.json) of requests is also provided with the project, just import into Postman and use.
 Make sure to lauch the application and run the tests in Development mode as to ensure database state for the tests to function corretly.
 
 <img src="https://github.com/user-attachments/assets/b2c924cc-e4f9-4ab2-8dc5-7dd8d65e239c" alt="Description" style="width:100%" style="display: block; margin: 0 auto;" />

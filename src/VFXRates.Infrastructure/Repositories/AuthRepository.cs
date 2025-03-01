@@ -21,16 +21,41 @@ public class AuthRepository : IAuthRepository
         await _logService.LogDebug($"Retrieving user with username: {username}.");
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Username == username);
-        await _logService.LogDebug($"Succssefully retrieved user with username: {username}.");
 
+        if(user is null)
+        {
+            await _logService.LogDebug($"User with username: {username} does not exist.");
+            return user;
+        }
+
+        await _logService.LogDebug($"Succssefully retrieved user with username: {username}.");
         return user;
     }
 
-    public async Task AddUserAsync(User user)
+    public async Task<bool> AddUserAsync(User user)
     {
         await _logService.LogDebug($"Adding user with username: {user.Username}.");
+
         _context.Users.Add(user);
-        await _logService.LogDebug($"Succssefully added user with username: {user.Username}.");
-        await _context.SaveChangesAsync();
+        try
+        {
+            int changes = await _context.SaveChangesAsync();
+            if (changes > 0)
+            {
+                await _logService.LogDebug($"Successfully added user with username: {user.Username}.");
+                return true;
+            }
+            else
+            {
+                await _logService.LogError($"No changes were saved for user with username: {user.Username}.");
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            await _logService.LogError($"Exception occurred while adding user with username: {user.Username}.", ex);
+
+            throw;
+        }
     }
 }

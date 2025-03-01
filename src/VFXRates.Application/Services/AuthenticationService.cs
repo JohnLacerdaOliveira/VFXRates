@@ -29,17 +29,17 @@ namespace VFXRates.Application.Services
         {
             var user = await _authRepository.GetUserByUsernameAsync(userDto.Username);
 
-            if (user == null || !BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
+            if (user == null || !BCrypt.Net.BCrypt.Verify(userDto.Password, user?.PasswordHash))
             {
                 await _logger.LogWarning($"Login failed for {userDto.Username}: Invalid credentials.");
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
 
             var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, userDto.Username),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, userDto.Username),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
 
             var jwtSettings = _configuration.GetSection("Jwt");
             var secretKey = jwtSettings["Secret"];
@@ -56,29 +56,41 @@ namespace VFXRates.Application.Services
             );
 
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            if (string.IsNullOrEmpty(tokenString))
+                throw new InvalidOperationException("Token generation failed.");
+
             await _logger.LogInformation($"User with username: {userDto.Username} logged in successfully.");
+
             return tokenString;
         }
 
         public async Task<UserDto> Register(UserDto userDto)
         {
+            // Check if the user already exists
             var existingUser = await _authRepository.GetUserByUsernameAsync(userDto.Username);
             if (existingUser != null)
             {
-                await _logger.LogWarning($"Registration failed: username: {userDto.Username} already exists.");
-                throw new InvalidOperationException("Username already taken.");
+                await _logger.LogWarning($"Registration failed: username {userDto.Username} already exists.");
+                throw new InvalidOperationException($"Username {userDto.Username} already taken.");
             }
 
-            var user = new User
+            var newUser = new User
             {
                 Username = userDto.Username,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password),
             };
 
-            await _authRepository.AddUserAsync(user);
-            await _logger.LogInformation($"User {userDto.Username} registered successfully.");
+            bool success = await _authRepository.AddUserAsync(newUser);
+            if (!success)
+            {
+                await _logger.LogError($"Registration failed: unable to add user {userDto.Username} to the database.");
+                throw new Exception("Registration failed due to an unexpected error.");
+            }
 
-            return new UserDto { Username = user.Username };
+            await _logger.LogInformation($"User {userDto.Username} registered successfully.");
+            return new UserDto { Username = newUser.Username };
         }
+
     }
 }

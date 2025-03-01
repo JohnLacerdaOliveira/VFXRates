@@ -20,9 +20,9 @@ namespace VFXRates.API.Extensions
         {
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "VFXRates API",
                     Version = "v1"
@@ -106,9 +106,9 @@ namespace VFXRates.API.Extensions
         }
 
         public static IServiceCollection ConfigureDatabaseServices(
-      this IServiceCollection services,
-      IConfiguration configuration,
-      string environment)
+             this IServiceCollection services,
+             IConfiguration configuration,
+             string environment)
         {
             ArgumentNullException.ThrowIfNull(environment, nameof(environment));
 

@@ -1,6 +1,5 @@
 using DotNetEnv;
 using VFXRates.API.Extensions;
-using VFXRates.Application.DTOs;
 
 namespace VFXRates.API
 {

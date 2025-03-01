@@ -26,7 +26,7 @@ namespace VFXRates.API.Controllers
         }
 
         [HttpGet("id/{id:int}")]
-        public async Task<ActionResult<FxRateDto>> GetFxRateById(int id)
+        public async Task<ActionResult<FxRateDto>> GetFxRateById([FromRoute] int id)
         {
             var fxRate = await _fxRateService.GetFxRateById(id);
             if (fxRate == null)
@@ -37,8 +37,8 @@ namespace VFXRates.API.Controllers
             return Ok(fxRate);
         }
 
-        [HttpGet("pair/{baseCurrency}/{quoteCurrency}")]
-        public async Task<ActionResult<FxRateDto>> GetFxRateByCurrencyPair(string baseCurrency, string quoteCurrency)
+        [HttpGet("pair/{baseCurrency:length(3)}/{quoteCurrency:length(3)}")]
+        public async Task<ActionResult<FxRateDto>> GetFxRateByCurrencyPair([FromRoute] string baseCurrency, [FromRoute] string quoteCurrency)
         {
             var fxRate = await _fxRateService.GetFxRateByCurrencyPair(baseCurrency, quoteCurrency);
             if (fxRate == null)
@@ -48,19 +48,15 @@ namespace VFXRates.API.Controllers
             }
             return Ok(fxRate);
         }
+
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<FxRateDto>> PostFxRate([FromBody] CreateFxRateDto createFxRateDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
             var createdRate = await _fxRateService.CreateFxRate(createFxRateDto);
             if (createdRate == null)
             {
                 await _logService.LogWarning($"Conflict: FX rate with BaseCurrency {createFxRateDto.BaseCurrency} and QuoteCurrency {createFxRateDto.QuoteCurrency} already exists.");
-
                 return Conflict();
             }
 
@@ -73,7 +69,7 @@ namespace VFXRates.API.Controllers
 
         [HttpPut("{baseCurrency:length(3)}/{quoteCurrency:length(3)}")]
         [Authorize]
-        public async Task<IActionResult> PutFxRate(string baseCurrency, string quoteCurrency, UpdateFxRateDto updateFxRateDto)
+        public async Task<ActionResult<UpdateFxRateDto>> PutFxRate([FromRoute] string baseCurrency, [FromRoute] string quoteCurrency, [FromBody] UpdateFxRateDto updateFxRateDto)
         {
             if (baseCurrency != updateFxRateDto.BaseCurrency || quoteCurrency != updateFxRateDto.QuoteCurrency)
             {
@@ -81,6 +77,7 @@ namespace VFXRates.API.Controllers
 
                 return BadRequest("Currency pair in route must match request body.");
             }
+
             var updatedRate = await _fxRateService.UpdateFxRate(updateFxRateDto);
             if (updatedRate == null)
             {
@@ -94,7 +91,7 @@ namespace VFXRates.API.Controllers
 
         [HttpDelete("{baseCurrency:length(3)}/{quoteCurrency:length(3)}")]
         [Authorize]
-        public async Task<IActionResult> DeleteFxRate(string baseCurrency, string quoteCurrency)
+        public async Task<IActionResult> DeleteFxRate([FromRoute] string baseCurrency, [FromRoute] string quoteCurrency)
         {
             var deleted = await _fxRateService.DeleteFxRate(baseCurrency, quoteCurrency);
             if (!deleted)

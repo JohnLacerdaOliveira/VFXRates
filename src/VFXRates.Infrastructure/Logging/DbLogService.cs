@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -10,12 +11,12 @@ namespace VFXRates.Infrastructure.Logging;
 
 public class DbLogService : ILogService
 {
-    private readonly FxRatesDbContext _context;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<DbLogService> _logger;
 
-    public DbLogService(FxRatesDbContext context, ILogger<DbLogService> logger)
+    public DbLogService(IServiceScopeFactory scopeFactory, ILogger<DbLogService> logger)
     {
-        _context = context;
+        _scopeFactory = scopeFactory;
         _logger = logger;
     }
 
@@ -57,10 +58,12 @@ public class DbLogService : ILogService
             Exception = ex?.ToString(),
         };
 
-        _context.Logs.Add(log);
-        await _context.SaveChangesAsync();
-
-        _logger.Log(logLevel, "{Message} | Exception: {Exception}", message, ex?.ToString());
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<FxRatesDbContext>();
+            dbContext.Logs.Add(log);
+            await dbContext.SaveChangesAsync();
+        }
     }
 
     private string CleanCategory(string category)

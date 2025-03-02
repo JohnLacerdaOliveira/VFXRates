@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
@@ -11,11 +10,12 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IDisposable
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
+    private readonly ILogService _logService;
     private readonly string _exchange;
 
-    public RabbitMqPublisher(IConfiguration configuration)
+    public RabbitMqPublisher(IConfiguration configuration, ILogService logService)
     {
-        //_logService = logService;
+        _logService = logService;
 
         var factory = new ConnectionFactory
         {
@@ -42,7 +42,8 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IDisposable
                            exchange: _exchange,
                            routingKey: "");
 
-        //_logService.LogInformation($"RabbitMQ publisher initialized with exchange: {_exchange}").GetAwaiter().GetResult(); ;
+
+       _logService.LogInformation($"RabbitMQ publisher initialized with exchange: {_exchange}").GetAwaiter().GetResult();
     }
 
     public Task PublishFxRateCreation(FxRate newRate)
@@ -59,12 +60,12 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IDisposable
                 body: body
             );
 
-            //_logService.LogInformation($"Published new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.").GetAwaiter().GetResult(); ;
+            _logService.LogInformation($"Published new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.").GetAwaiter().GetResult();
             return Task.CompletedTask;
         }
         catch (Exception ex)
         {
-            //_logService.LogError($"Failed to publish new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.",ex).GetAwaiter().GetResult();;
+            _logService.LogError($"Failed to publish new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.",ex).GetAwaiter().GetResult();
             throw;
         }
     }
@@ -73,6 +74,6 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IDisposable
     {
         _channel?.Close();
         _connection?.Close();
-        //_logService.LogInformation("RabbitMQ connection and channel closed.");
+        _logService.LogInformation("RabbitMQ connection and channel closed.").GetAwaiter().GetResult();
     }
 }

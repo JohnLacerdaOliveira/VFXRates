@@ -1,23 +1,27 @@
 ﻿using System.Net;
 using System.Security.Authentication;
 using System.Text.Json;
+using VFXRates.Application.Interfaces;
 
 namespace VFXRates.API.Middlewares
 {
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ErrorHandlingMiddleware> _logger;
+        private readonly ILogService _logService;
         private readonly IWebHostEnvironment _appEnv;
 
-        public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger, IWebHostEnvironment appEnv)
+        public ErrorHandlingMiddleware(
+            RequestDelegate next, 
+            ILogService logService, 
+            IWebHostEnvironment appEnv)
         {
             _next = next;
-            _logger = logger;
+            _logService = logService;
             _appEnv = appEnv;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {
@@ -25,37 +29,36 @@ namespace VFXRates.API.Middlewares
             }
             catch (Exception ex)
             {
-                // If an exception occurs, handle it.
                 await HandleExceptionAsync(context, ex);
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception ex)
         {
             HttpStatusCode status;
             string message;
             string? stackTrace = string.Empty;
 
-            _logger.LogError(exception, "An unhandled exception has occurred.");
+            await _logService.LogError("An unhandled exception has occurred.", ex);
 
-            if (exception is DirectoryNotFoundException ||
-                exception is DllNotFoundException ||
-                exception is EntryPointNotFoundException ||
-                exception is FileNotFoundException ||
-                exception is KeyNotFoundException)
+            if (ex is DirectoryNotFoundException ||
+                ex is DllNotFoundException ||
+                ex is EntryPointNotFoundException ||
+                ex is FileNotFoundException ||
+                ex is KeyNotFoundException)
             {
                 status = HttpStatusCode.NotFound;
             }
-            else if (exception is NotImplementedException)
+            else if (ex is NotImplementedException)
             {
                 status = HttpStatusCode.NotImplemented;
             }
-            else if (exception is UnauthorizedAccessException || 
-                    exception is AuthenticationException)
+            else if (ex is UnauthorizedAccessException || 
+                    ex is AuthenticationException)
             {
                 status = HttpStatusCode.Unauthorized;
             }
-            else if (exception is InvalidOperationException)
+            else if (ex is InvalidOperationException)
             {
                 status = HttpStatusCode.BadRequest;
             }
@@ -67,8 +70,8 @@ namespace VFXRates.API.Middlewares
             // In development, return the full exception message and stack trace.
             if (_appEnv.IsDevelopment())
             {
-                message = exception.Message;
-                stackTrace = exception.StackTrace?.ToString();
+                message = ex.Message;
+                stackTrace = ex.StackTrace?.ToString();
             }
             else
             {
@@ -88,7 +91,7 @@ namespace VFXRates.API.Middlewares
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
 
-            return context.Response.WriteAsync(jsonResponse);
+            await context.Response.WriteAsync(jsonResponse);
         }
     }
 }

@@ -13,12 +13,14 @@ namespace VFXRates.API
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.ConfigureApiServices();
-            builder.Services.ConfigureApplicationServices();
+
+            builder.Services.ConfigureApplicationServices(
+                builder.Environment.EnvironmentName);
+
             builder.Services.ConfigureAuthenticationServices(
                 builder.Configuration);
 
-            builder.Services.ConfigureExternalServices(
-                builder.Environment.EnvironmentName);
+            builder.Services.ConfigureExternalServices();
 
             builder.Services.ConfigureDatabaseServices(
                 builder.Configuration,

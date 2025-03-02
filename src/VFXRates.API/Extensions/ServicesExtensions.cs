@@ -31,12 +31,25 @@ namespace VFXRates.API.Extensions
 
             return services;
         }
-        public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureApplicationServices(
+            this IServiceCollection services,
+            string environment)
         {
             services.AddScoped<IFxRatesRepository, FxRatesRepository>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IFxRateService, FxRateService>();
             services.AddScoped<IAuthService, AuthenticationService>();
+
+            services.AddSingleton<ILogService, DbLogService>();
+
+            if (environment == "Development")
+            {
+                services.AddLogging(loggingBuilder =>
+                {
+                    loggingBuilder.ClearProviders();
+                    loggingBuilder.AddConsole();
+                });
+            }
 
             return services;
         }
@@ -85,22 +98,10 @@ namespace VFXRates.API.Extensions
             return services;
         }
 
-        public static IServiceCollection ConfigureExternalServices(this IServiceCollection services,
-          string environment)
+        public static IServiceCollection ConfigureExternalServices(this IServiceCollection services)
         {
-            services.AddScoped<ILogService, DbLogService>();
-
-            if (environment == "Development")
-            {
-                services.AddLogging(loggingBuilder =>
-                {
-                    loggingBuilder.ClearProviders();
-                    loggingBuilder.AddConsole();
-                });
-            }
-
             services.AddHttpClient<IExchangeRateApiClient, AlphaVantageApiClient>();
-            services.AddScoped<IRabbitMqPublisher, RabbitMqPublisher>();
+            services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
 
             return services;
         }
@@ -110,8 +111,6 @@ namespace VFXRates.API.Extensions
              IConfiguration configuration,
              string environment)
         {
-            ArgumentNullException.ThrowIfNull(environment, nameof(environment));
-
             string? connectionString = environment switch
             {
                 "IntegrationTest" => null,

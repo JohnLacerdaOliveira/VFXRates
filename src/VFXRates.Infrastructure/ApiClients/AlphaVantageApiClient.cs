@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System.Globalization;
 using System.Text.Json;
 using VFXRates.Application.DTOs;
@@ -17,7 +16,7 @@ namespace VFXRates.Infrastructure.ApiClients
         {
             _httpClient = httpClient;
             _logService = logService;
-            _apiKey = configuration["AlphaVantage:ApiKey"] ?? 
+            _apiKey = configuration["AlphaVantage:ApiKey"] ??
                 throw new ArgumentNullException("API key is missing");
         }
 

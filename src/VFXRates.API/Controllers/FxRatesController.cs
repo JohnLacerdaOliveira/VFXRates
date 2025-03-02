@@ -5,8 +5,8 @@ using VFXRates.Application.Interfaces;
 
 namespace VFXRates.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class FxRatesController : ControllerBase
     {
         private readonly IFxRateService _fxRateService;

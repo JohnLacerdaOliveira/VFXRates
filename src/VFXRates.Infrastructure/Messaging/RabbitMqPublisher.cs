@@ -41,12 +41,9 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IDisposable
         _channel.QueueBind(queue: queueName,
                            exchange: _exchange,
                            routingKey: "");
-
-
-       _logService.LogInformation($"RabbitMQ publisher initialized with exchange: {_exchange}").GetAwaiter().GetResult();
     }
 
-    public Task PublishFxRateCreation(FxRate newRate)
+    public async Task PublishFxRateCreation(FxRate newRate)
     {
         try
         {
@@ -60,12 +57,12 @@ public class RabbitMqPublisher : IRabbitMqPublisher, IDisposable
                 body: body
             );
 
-            _logService.LogInformation($"Published new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.").GetAwaiter().GetResult();
-            return Task.CompletedTask;
+            await _logService.LogInformation($"Published new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.");
+            
         }
         catch (Exception ex)
         {
-            _logService.LogError($"Failed to publish new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.",ex).GetAwaiter().GetResult();
+            await _logService.LogError($"Failed to publish new FX rate event for {newRate.BaseCurrency}/{newRate.QuoteCurrency}.",ex);
             throw;
         }
     }

@@ -95,25 +95,37 @@ Store a .Env file in the project's root directory with values for the following 
 
 ```text 
 # .env file
-	
+
 # Docker Compose Environment Variables
-	
+
 SA_PASSWORD=
 SQLSERVER_CONNECTIONSTRING=
+
 API_KEY=
+
 RABBITMQ_USER=
 RABBITMQ_PASS=
-	
+
+
 # appsetting.json overrides
+
 ConnectionStrings__FxRatesDevDb=
+
 ConnectionStrings__FxRatesProdDb=
+
 ConnectionStrings__FxRatesDockerDb=
+
+Jwt__Secret=
+
 AlphaVantage__ApiKey=
-	
-RabbitMQ__Port=
+
 RabbitMQ__UserName=
 RabbitMQ__Password=
 RabbitMQ__Exchange=
+
+# appsetting.Production.json overrides
+
+Kestrel__Endpoints__Https__Certificate__Password=
 ```
 3. **Create a HTTPS certificate:**
 Run the following command on the projects root folder:
